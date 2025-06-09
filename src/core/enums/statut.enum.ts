@@ -1,0 +1,6 @@
+export enum Statut {
+  RESOLU = 'RESOLU',
+  NON_RESOLU = 'NON_RESOLU',
+  ENCOURS = 'ENCOURS',
+  ESCALADE = 'ESCALADE',
+}
