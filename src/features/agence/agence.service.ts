@@ -26,6 +26,13 @@ export class AgenceService {
     return this.agenceRepository.findOneBy({ id });
   }
 
+  async findOneWithUsers(id: number) {
+    return this.agenceRepository.findOne({
+      where: { id },
+      relations: ['users'],
+    });
+  }
+
   async update(id: number, updateAgenceDto: UpdateAgenceDto): Promise<Agence> {
     await this.agenceRepository.update(id, updateAgenceDto);
     return this.findOne(id);

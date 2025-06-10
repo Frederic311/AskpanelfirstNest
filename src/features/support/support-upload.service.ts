@@ -13,7 +13,7 @@ export class SupportUploadService {
   constructor(
     @InjectRepository(Support)
     private readonly supportRepository: Repository<Support>,
-  ) {}
+  ) { }
 
   async saveSupportEntitiesFromExcel(buffer: Buffer) {
     const workbook = new ExcelJS.Workbook();
@@ -22,6 +22,8 @@ export class SupportUploadService {
     const headers = sheet.getRow(1).values as string[];
     const validHeaders = [
       'date',
+      'reseau',
+      'agence',
       'utilisateur',
       'fonction',
       'descriptif',
@@ -76,6 +78,12 @@ export class SupportUploadService {
               } else {
                 support.date = '';
               }
+              break;
+            case 'reseau':
+              support.reseau = value ? String(value) : '';
+              break;
+            case 'agence':
+              support.agence = value ? String(value) : '';
               break;
             case 'heureDebut':
             case 'heureFin':

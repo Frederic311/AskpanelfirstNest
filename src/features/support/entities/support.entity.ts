@@ -13,6 +13,12 @@ export class Support {
   @Column()
   fonction: string;
 
+  @Column()
+  reseau: string;
+
+  @Column()
+  agence: string;
+
   @Column({ type: 'date' })
   date: string;
 

@@ -9,6 +9,12 @@ export class CreateSupportDto {
   @IsString()
   fonction: string;
 
+  @IsString()
+  reseau: string;
+
+  @IsString()
+  agence: string;
+
   @IsDateString()
   date: string; // ISO date string, e.g. '2024-06-06'
 

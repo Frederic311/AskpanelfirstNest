@@ -26,6 +26,11 @@ export class AgenceController {
     return this.agenceService.findOne(+id);
   }
 
+  @Get(':id/users')
+  async getAgenceWithUsers(@Param('id') id: string) {
+    return this.agenceService.findOneWithUsers(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAgenceDto: UpdateAgenceDto) {
     return this.agenceService.update(+id, updateAgenceDto);

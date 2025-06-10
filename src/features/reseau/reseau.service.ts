@@ -23,8 +23,28 @@ export class ReseauService {
     return this.reseauRepository.find();
   }
 
-  async findOne(id: number): Promise<Reseau> {
-    return this.reseauRepository.findOneBy({ id });
+  async findOne(id: number): Promise<Reseau & { agencesHistory: any[] }> {
+    // Get the reseau with only current agences (dateFin is null)
+    const reseau = await this.reseauRepository.findOne({
+      where: { id },
+      relations: [
+        'agencesHistory',
+        'agencesHistory.agence',
+      ],
+    });
+
+    if (!reseau) return null;
+
+    // Filter agencesHistory to only those with dateFin === null
+    const currentAgencesHistory = (reseau.agencesHistory || []).filter(
+      (history: any) => history.dateFin === null
+    );
+
+    // Return reseau with only current agencesHistory
+    return {
+      ...reseau,
+      agencesHistory: currentAgencesHistory,
+    };
   }
 
   async update(id: number, updateAgenceDto: UpdateReseauDto): Promise<Reseau> {
