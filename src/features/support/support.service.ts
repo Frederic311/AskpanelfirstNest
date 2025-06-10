@@ -14,6 +14,12 @@ export class SupportService {
 
   async create(createSupportDto: CreateSupportDto): Promise<Support> {
     const support = this.supportRepository.create(createSupportDto);
+    // If created manually, set isManuallyAdded to true
+    support.isManuallyAdded = true;
+    support.isActiveInExcel = false;
+    support.isManuallyModified = false;
+    support.lastManualUpdateAt = new Date();
+    // Optionally set manuallyUpdatedBy if you have user info
     return this.supportRepository.save(support);
   }
 
@@ -32,12 +38,19 @@ export class SupportService {
   async update(
     id: number,
     updateSupportDto: UpdateSupportDto,
+    userId?: string, // Optionally pass user id/email for audit
   ): Promise<Support> {
     const support = await this.supportRepository.findOne({ where: { id } });
     if (!support) {
       throw new NotFoundException('Support not found');
     }
     Object.assign(support, updateSupportDto);
+    // Mark as manually modified
+    support.isManuallyModified = true;
+    support.lastManualUpdateAt = new Date();
+    if (userId) {
+      support.manuallyUpdatedBy = userId;
+    }
     return this.supportRepository.save(support);
   }
 

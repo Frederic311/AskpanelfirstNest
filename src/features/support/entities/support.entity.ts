@@ -42,4 +42,32 @@ export class Support {
 
   @Column({ type: 'enum', enum: Statut })
   statut: Statut;
+
+
+
+//Integrity
+@Column({ unique: true, nullable: true })
+  excelUniqueId?: string; // Unique ID from Excel (e.g., ticket number or composite key)
+
+  @Column({ nullable: true })
+  lastSyncedFromExcelAt?: Date;
+
+  @Column({ default: true })
+  isActiveInExcel: boolean;
+
+  @Column({ nullable: true })
+  excelDataHash?: string;
+
+  @Column({ default: false })
+  isManuallyAdded: boolean;
+
+  @Column({ default: false })
+  isManuallyModified: boolean;
+
+  @Column({ nullable: true })
+  lastManualUpdateAt?: Date;
+
+  @Column({ nullable: true })
+  manuallyUpdatedBy?: string;
+
 }
