@@ -8,8 +8,8 @@ export class SupportCronService {
 
   @Cron('*/30 * * * *')
   async handleCron() {
-    const fileId = '01U3WPLN33BZCWK4AOCFBJYEL5GDEVUL23';
-    const worksheetName = 'Sheet1';
+    const fileId = process.env.EXCEL_FILE_ID;
+    const worksheetName = process.env.EXCEL_WORKSHEET_NAME;
     await this.msGraphExcelService.fetchAndProcessExcel(fileId, worksheetName);
   }
 }

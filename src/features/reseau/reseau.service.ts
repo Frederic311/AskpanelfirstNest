@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Reseau } from './entities/reseau.entity';
 import * as ExcelJS from 'exceljs';
+import { ConflictException } from '@nestjs/common';
 
 
 @Injectable()
@@ -14,10 +15,20 @@ export class ReseauService {
     private readonly reseauRepository: Repository<Reseau>,
   ) {}
 
-  async create(CreateReseauDto: CreateReseauDto): Promise<Reseau> {
-    const agence = this.reseauRepository.create(CreateReseauDto);
-    return this.reseauRepository.save(agence);
+  async create(createReseauDto: CreateReseauDto): Promise<Reseau> {
+  try {
+    const reseau = this.reseauRepository.create(createReseauDto);
+    return await this.reseauRepository.save(reseau);
+  } catch (error) {
+    if (
+      error.code === '23505' || // Postgres unique violation
+      error.message.includes('duplicate key value') // Fallback for other DBs
+    ) {
+      throw new ConflictException('Ce reseau existe déjà');
+    }
+    throw error;
   }
+}
 
   async findAll(): Promise<Reseau[]> {
     return this.reseauRepository.find();
